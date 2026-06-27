@@ -50,8 +50,8 @@ const Navbar = () => {
                                 <div tabIndex={0} role="button" className="btn btn-ghost btn-circle avatar ring-2 ring-base-300 hover:ring-primary focus:ring-primary transition-all p-0">
                                     <div className="w-10 rounded-full overflow-hidden">
                                         <Image
-                                            alt={session?.user?.name}
-                                            src={session?.user?.image}
+                                            alt={session?.user?.name || 'arafat'}
+                                            src={session?.user?.image || 'https://a57.foxnews.com/static.foxnews.com/foxnews.com/content/uploads/2024/11/1200/675/e5c757ab-trump.jpg?ve=1&tl=1'}
                                             width={40}
                                             height={40}
                                             className="object-cover" />

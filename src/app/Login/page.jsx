@@ -5,6 +5,7 @@ import { Form } from "@heroui/react";
 import { authClient } from "@/lib/auth-client";
 import { ToastContainer, toast } from 'react-toastify';
 
+
 const Login = () => {
     const readyLogin = async (e) => {
         e.preventDefault()
@@ -24,12 +25,6 @@ const Login = () => {
             toast(error.message)
         }
     }
-    const signIn = async () => {
-        const data = await authClient.signIn.social({
-            provider: "google",
-        });
-        console.log(data)
-    };
     return (
         <div className="flex justify-center items-center text-center">
             <div>

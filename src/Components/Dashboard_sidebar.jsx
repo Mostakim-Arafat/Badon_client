@@ -26,11 +26,15 @@ export default function Sidebar( ) {
     if(userinfo?.role === 'donor'){
        navItems = Donormenu
     }
-    if(userinfo?.role === 'volunteer'){
+    
+    else if(userinfo?.role === 'volunteer'){
        navItems = Volunteer_menu
     }
-    if(userinfo?.role === 'admin'){
+    else if(userinfo?.role === 'admin'){
        navItems = Admin_menu
+    }
+    else {
+       return <h1>loading..................</h1>
     }
 
   return (
