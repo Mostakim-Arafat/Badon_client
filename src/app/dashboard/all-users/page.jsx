@@ -5,8 +5,7 @@ import { getFLocal } from '@/lib/allget';
 const AllUsers = async() => {
     const users = await getFLocal('/users')
     return (
-        <div>
-            all users
+        <div className="bg-white rounded-2xl border border-red-50 shadow-sm overflow-hidden">
             <AlluserTable users={users}></AlluserTable>
         </div>
     );

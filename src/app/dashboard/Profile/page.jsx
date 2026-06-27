@@ -58,7 +58,7 @@ const Profile = () => {
                         </div>
                     )}
                 </div>
-                <h1 className="text-2xl font-black text-red-700 tracking-wide uppercase">Donor Profile</h1>
+                <h1 className="text-2xl font-black text-red-700 tracking-wide uppercase">Profile</h1>
                 <p className="text-xs text-rose-500 font-semibold uppercase tracking-wider mt-1">Life Saver Dashboard Panel</p>
             </div>
 
