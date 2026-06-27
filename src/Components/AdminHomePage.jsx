@@ -1,6 +1,7 @@
+'use client';
+
 import { getFLocal } from "@/lib/allget";
-import { useState } from "react";
-import { useEffect } from "react";
+import { useState, useEffect } from "react";
 const AdminHomePage = ({ userinfo }) => {
     const [users,Setusers] = useState([])
     const [requests,Setrequests] = useState([])

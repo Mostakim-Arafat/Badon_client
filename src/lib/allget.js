@@ -14,17 +14,17 @@ export const userData = () =>{
 }
 
 const getAuthHeaders = async () => {
-    try {
-        const { data, error } = await authClient.token();
-        if (data?.token) {
-            return {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${data.token}`
-            };
-        }
-    } catch (err) {
-        console.error("Failed to fetch auth token:", err);
-    }
+    // try {
+    //     const { data, error } = await authClient.token();
+    //     if (data?.token) {
+    //         return {
+    //             'Content-Type': 'application/json',
+    //             'Authorization': `Bearer ${data.token}`
+    //         };
+    //     }
+    // } catch (err) {
+    //     console.error("Failed to fetch auth token:", err);
+    // }
     return { 'Content-Type': 'application/json' };
 };
 

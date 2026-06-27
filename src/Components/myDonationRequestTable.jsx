@@ -12,7 +12,6 @@ const MyDonationRequestTable = ({ datas, role }) => {
     const [selected, setSelected] = useState(new Set(["all"]));
     const router = useRouter()
     const activeStatusFilter = Array.from(selected)[0];
-    console.log(activeStatusFilter)
     const optionData = datas.filter( item => {
         if(activeStatusFilter === 'all'){
             return true

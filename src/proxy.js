@@ -3,7 +3,6 @@ import { getUserData } from './lib/crud'
 // This function can be marked `async` if using `await` inside
 export async function proxy(request) {
     const user = await getUserData()
-    console.log(user)
     if(!user){
          return NextResponse.redirect(new URL('/Login', request.url))
     }

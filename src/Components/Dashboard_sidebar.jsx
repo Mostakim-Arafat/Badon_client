@@ -8,7 +8,6 @@ import Link from "next/link";
 export default function Sidebar() {
   const { userInfo, isLoading } = userData()
   const userinfo = userInfo
-  console.log(userinfo)
   let navItems = []
   const Donormenu = [
     { icon: Person, label: "Profile", href: '/dashboard/Profile' },
