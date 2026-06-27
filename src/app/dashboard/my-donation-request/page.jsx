@@ -10,8 +10,7 @@ const MyDonationRequest = async() => {
     const data = await getFLocal(`/my-requests?Email=${userinfo?.email}`)
     console.log(data)
     return (
-        <div>
-            my donation requenst
+        <div className='min-h-screen w-11/12 mx-auto my-5'>
            <MyDonationRequestTable datas={data} role={role}></MyDonationRequestTable>
         </div>
     );
