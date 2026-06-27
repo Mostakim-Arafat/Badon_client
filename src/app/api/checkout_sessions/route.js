@@ -3,13 +3,15 @@ import { headers } from 'next/headers'
 
 import { stripe } from '@/lib/stripe'
 
-export async function POST() {
+export async function POST(req) {
   try {
     const headersList = await headers()
     const origin = headersList.get('origin')
-
+    const formData = await req.formData()
+    const donorEmail = formData.get('email')
     // Create Checkout Sessions from body params.
     const session = await stripe.checkout.sessions.create({
+      customer_email : donorEmail,
      line_items: [
         {
           // Provide the exact Price ID (for example, price_1234) of the product you want to sell

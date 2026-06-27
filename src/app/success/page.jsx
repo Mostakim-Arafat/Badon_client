@@ -1,24 +1,45 @@
 import { redirect } from 'next/navigation';
 import { stripe } from '@/lib/stripe';
+import { getUserData, postToServer } from '@/lib/crud';
 
 export default async function Success({ searchParams }) {
+  const userInfo = await getUserData();
   const { session_id } = await searchParams;
 
   if (!session_id)
     throw new Error('Please provide a valid session_id (`cs_test_...`)');
 
-  const {
-    status,
-    customer_details: { email: customerEmail }
-  } = await stripe.checkout.sessions.retrieve(session_id, {
-    expand: ['line_items', 'payment_intent']
+  const session = await stripe.checkout.sessions.retrieve(session_id, {
+    expand: ['line_items', 'payment_intent'],
   });
+
+  const { status } = session;
+  const customerEmail =
+    session.customer_details?.email ?? session.customer_email;
+  const amount = session.amount_total
+    ? String(session.amount_total / 100)
+    : '$1';
 
   if (status === 'open') {
     return redirect('/');
   }
 
   if (status === 'complete') {
+    try {
+      const payload = {
+        email: customerEmail,
+        name: userInfo?.name,
+        amount,
+      };
+
+      const postman = await postToServer('/fund', payload);
+      console.log('Database insertion response:', postman);
+    } catch (fetchError) {
+      console.error(
+        'Failed logging the donation to the local database:',
+        fetchError.message
+      );
+    }
     return (
       <div className="flex min-h-screen items-center justify-center bg-rose-50 p-6 text-slate-800">
         <section 
