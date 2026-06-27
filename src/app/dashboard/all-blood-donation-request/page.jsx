@@ -8,7 +8,6 @@ const AllRequests = async() => {
     const role = userinfo?.role
     return (
         <div>
-            all blood donation requests
             <MyDonationRequestTable datas={data} role={role}></MyDonationRequestTable>
 
         </div>
