@@ -4,10 +4,16 @@ import { Button, Input, Label, Modal, Surface, TextField, Card } from "@heroui/r
 import { patchFLocal } from "@/lib/allget";
 import { userData } from "@/lib/allget";
 
+
 export default function DonationRequestDetails({ request }) {
-    // Safe extraction with default fallbacks
-    const userInfo = userData()
+    const {userInfo,isLoading} = userData();
+    
+   
+  
+
+
     console.log(userInfo)
+    console.log(request)
     const {
         _id,
         recipientName,
@@ -24,14 +30,16 @@ export default function DonationRequestDetails({ request }) {
     } = request;
    
     const statusChange = async() => {
-        // const totalData = {...request}
-        // totalData.donorName = userInfo?.name
-        // totalData.donorEmail = userInfo?.email
-        // const item = new URLSearchParams(totalData)
         const change = await patchFLocal(`/donation_requests/${_id}?donorName=${userInfo?.name}&donorEmail=${userInfo?.email}`)
         console.log(change)
     }
-
+    if(isLoading){
+        return(
+            <div>
+                <h1>Loading.......................</h1>
+            </div>
+        )
+    }
     return (
         <Card className="max-w-md w-full border border-red-100 bg-white shadow-xl rounded-2xl overflow-hidden text-slate-800 transition-all hover:shadow-2xl hover:border-red-200">
 

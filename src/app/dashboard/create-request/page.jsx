@@ -1,13 +1,38 @@
 
 "use client";
 import { Button, FieldError, Form, Input, Label, ListBox, Select } from "@heroui/react";
-import { userData } from "@/lib/allget";
-import { postFLocal } from "@/lib/allget";
+import { getFLocal, postFLocal } from "@/lib/allget";
+import { useEffect, useState } from "react";
+import { authClient } from "@/lib/auth-client";
+
 const CreateRequest = () => {
-    const userInfo = userData()
-    console.log(userInfo)
+    const { data: session } = authClient.useSession();
+    const userInfo = session?.user;
     const bloodGroups = ["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"];
     
+    //district start 
+     const [districts, setdistricts] = useState([])
+        const [upazilas, setupazilas] = useState([])
+        const [selectDID, setDID] = useState('')
+        const [selectU, setU] = useState('')
+        
+       
+    
+        const handleDistrictSelection = (key) => {
+            const district = districts.find((d) => d.name === key);
+            setDID(String(district?.id ?? ""));
+            setU("");
+        };
+
+        const handleUpazilaSelection = (key) => {
+            setU(key);
+        };
+
+        const filteredUpazilas = upazilas.filter(
+            (upazila) => String(upazila.district_id) === String(selectDID)
+        );
+
+        //district end
 
     const onSubmit = async (e) => {
         if (userInfo?.status === 'active') {
@@ -32,6 +57,14 @@ const CreateRequest = () => {
             alert('you are blocked')
         }
     }
+
+     useEffect(() => {
+            const largeData = async () => {
+                setdistricts(await getFLocal('/district'))
+                setupazilas(await getFLocal('/upazila'))
+            }
+            largeData()
+        }, [])
 
 
     return (
@@ -76,7 +109,13 @@ const CreateRequest = () => {
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div className="flex flex-col gap-1">
-                            <Select required name="recipientDistrict" placeholder="Select District" className="w-full">
+                            <Select
+                                required
+                                name="recipientDistrict"
+                                placeholder="Select District"
+                                className="w-full"
+                                onSelectionChange={handleDistrictSelection}
+                            >
                                 <Label className="text-sm font-semibold text-slate-700">Recipient District</Label>
                                 <Select.Trigger>
                                     <Select.Value />
@@ -84,8 +123,17 @@ const CreateRequest = () => {
                                 </Select.Trigger>
                                 <Select.Popover>
                                     <ListBox>
-                                        <ListBox.Item id="dhaka" textValue="Dhaka" className="text-slate-800">Dhaka</ListBox.Item>
-                                        <ListBox.Item id="chittagong" textValue="Chittagong" className="text-slate-800">Chittagong</ListBox.Item>
+                                        {districts.map((district) => (
+                                            <ListBox.Item
+                                                key={district._id}
+                                                id={district.name}
+                                                textValue={district.name}
+                                                className="text-red-700 font-medium"
+                                            >
+                                                {district.name}
+                                                <ListBox.ItemIndicator />
+                                            </ListBox.Item>
+                                        ))}
                                     </ListBox>
                                 </Select.Popover>
                                 <FieldError />
@@ -93,7 +141,15 @@ const CreateRequest = () => {
                         </div>
 
                         <div className="flex flex-col gap-1">
-                            <Select required name="recipientUpazila" placeholder="Select Upazila" className="w-full">
+                            <Select
+                                required
+                                name="recipientUpazila"
+                                placeholder={!selectDID ? "Choose a District first" : "Select Upazila"}
+                                className="w-full"
+                                selectedKey={selectU || null}
+                                onSelectionChange={handleUpazilaSelection}
+                                isDisabled={!selectDID}
+                            >
                                 <Label className="text-sm font-semibold text-slate-700">Recipient Upazila</Label>
                                 <Select.Trigger>
                                     <Select.Value />
@@ -101,8 +157,17 @@ const CreateRequest = () => {
                                 </Select.Trigger>
                                 <Select.Popover>
                                     <ListBox>
-                                        <ListBox.Item id="mirpur" textValue="Mirpur" className="text-slate-800">Mirpur</ListBox.Item>
-                                        <ListBox.Item id="dhanmondi" textValue="Dhanmondi" className="text-slate-800">Dhanmondi</ListBox.Item>
+                                        {filteredUpazilas.map((upazila) => (
+                                            <ListBox.Item
+                                                key={upazila._id}
+                                                id={upazila.name.toLowerCase()}
+                                                textValue={upazila.name}
+                                                className="text-red-700 font-medium"
+                                            >
+                                                {upazila.name}
+                                                <ListBox.ItemIndicator />
+                                            </ListBox.Item>
+                                        ))}
                                     </ListBox>
                                 </Select.Popover>
                                 <FieldError />
@@ -132,8 +197,8 @@ const CreateRequest = () => {
                                 </Select.Trigger>
                                 <Select.Popover>
                                     <ListBox>
-                                        {bloodGroups.map((group) => (
-                                            <ListBox.Item key={group} id={group} textValue={group} className="text-red-700 font-medium">
+                                        {bloodGroups.map((group,idx_blood) => (
+                                            <ListBox.Item key={idx_blood} id={group} textValue={group} className="text-red-700 font-medium">
                                                 {group}
                                                 <ListBox.ItemIndicator />
                                             </ListBox.Item>

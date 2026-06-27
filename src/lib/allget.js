@@ -5,9 +5,12 @@ import { authClient } from "./auth-client";
 
 
 export const userData = () =>{
-    const {data : session} = authClient.useSession()
-    const userinfo = session?.user
-    return userinfo
+    const {data : session, isPending} = authClient.useSession()
+    const obj = {
+        userInfo : session?.user,
+        isLoading : isPending
+    }
+    return obj
 }
 
 const getAuthHeaders = async () => {

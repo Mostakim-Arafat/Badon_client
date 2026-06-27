@@ -8,7 +8,6 @@ import { getFLocal } from "@/lib/allget";
 import { useState } from "react";
 
 const Register = () => {
-   
     const [districts, setdistricts] = useState([])
     const [upazilas, setupazilas] = useState([])
     const [selectDID, setDID] = useState('')
@@ -24,30 +23,27 @@ const Register = () => {
 
     const handleDistrictChange = (e) => {
         setDID(e.target.value);
-        setU(""); // Reset the upazila whenever the district changes
+        setU(""); 
     };
 
     const filteredUpazilas = upazilas.filter(
         (upazila) => upazila.district_id === selectDID
     );
+
     const onSubmit = async (e) => {
         e.preventDefault()
         const data1 = new FormData(e.currentTarget)
         const data2 = Object.fromEntries(data1.entries())
-        // console.log(data2)
-        // console.log(selectDID)
 
         const districtObj = districts.find( i => 
             String(i.id) === String(selectDID)
         )
         const districtName = districtObj?.name
 
-        console.log(districtObj)
-
         const { data, error } = await authClient.signUp.email({
-            name: data2.fullName, // required
-            email: data2.email, // required
-            password: data2.password, // required
+            name: data2.fullName, 
+            email: data2.email, 
+            password: data2.password, 
             image: data2.photoURL,
             role: 'donor',
             status: 'active',
@@ -55,30 +51,36 @@ const Register = () => {
             upazila: selectU
         });
         if (data) {
-            console.log(data)
             toast.success('Registered success')
         }
         else {
             toast.error(error.message)
         }
-
     }
-    return (
-        <div className="flex justify-center items-center my-3">
-            <div>
-                <h1 className="text-2xl text-center font-serif ">Register</h1>
-                <Form className="flex w-96 flex-col gap-4" onSubmit={onSubmit}>
-                    <TextField isRequired className="w-full max-w-64" name="fullName">
-                        <Label>Full Name</Label>
-                        <Input placeholder="John Doe" />
-                        <Description>This field is required</Description>
-                    </TextField>
 
+    return (
+        <div className="flex justify-center items-center min-h-screen bg-rose-50/50 p-6 text-slate-800">
+            <div className="w-full max-w-xl border border-red-100 p-8 rounded-2xl shadow-xl bg-white flex flex-col gap-6">
+                <div className="flex flex-col items-center gap-2 border-b pb-5">
+                    <div className="w-14 h-14 rounded-full bg-red-100 flex items-center justify-center text-red-600 font-bold text-3xl shadow-sm">
+                        🩸
+                    </div>
+                    <h1 className="text-3xl text-center font-bold text-red-700 tracking-wide mt-2">Join as a Donor</h1>
+                    <p className="text-sm text-rose-500 font-medium">Become a lifesaver today. Register your account.</p>
+                </div>
+
+                <Form className="flex w-full flex-col gap-5" onSubmit={onSubmit}>
+                    <TextField isRequired className="w-full" name="fullName">
+                        <Label className="text-sm font-semibold text-slate-700 pb-1">Full Name</Label>
+                        <Input placeholder="John Doe" className="w-full transition-all" />
+                        <Description className="text-xs text-slate-400 mt-1">Please enter your legal name</Description>
+                    </TextField>
 
                     <TextField
                         isRequired
                         name="email"
                         type="email"
+                        className="w-full"
                         validate={(value) => {
                             if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(value)) {
                                 return "Please enter a valid email address";
@@ -86,15 +88,15 @@ const Register = () => {
                             return null;
                         }}
                     >
-                        <Label>Email</Label>
-                        <Input placeholder="john@example.com" />
-                        <FieldError />
+                        <Label className="text-sm font-semibold text-slate-700 pb-1">Email Address</Label>
+                        <Input placeholder="john@example.com" className="w-full" />
+                        <FieldError className="text-xs text-red-500 mt-1" />
                     </TextField>
 
-                    <TextField className="w-full max-w-64" name="photoURL" defaultValue='https://a57.foxnews.com/static.foxnews.com/foxnews.com/content/uploads/2024/11/1200/675/e5c757ab-trump.jpg?ve=1&tl=1'>
-                        <Label>photo URL</Label>
-                        <Input placeholder="https://...." type="url" />
-                        <Description>This field is required</Description>
+                    <TextField className="w-full" name="photoURL" defaultValue='https://a57.foxnews.com/static.foxnews.com/foxnews.com/content/uploads/2024/11/1200/675/e5c757ab-trump.jpg?ve=1&tl=1'>
+                        <Label className="text-sm font-semibold text-slate-700 pb-1">Profile Photo URL</Label>
+                        <Input placeholder="https://...." type="url" className="w-full" />
+                        <Description className="text-xs text-slate-400 mt-1">Provide a valid image direct link</Description>
                     </TextField>
 
                     <TextField
@@ -102,6 +104,7 @@ const Register = () => {
                         minLength={6}
                         name="password"
                         type="password"
+                        className="w-full"
                         validate={(value) => {
                             if (value.length < 6) {
                                 return "Password must be at least 6 characters";
@@ -110,78 +113,72 @@ const Register = () => {
                                 return "Password must contain at least one uppercase letter";
                             }
                             if (!/[a-z]/.test(value)) {
-                                return "Password must contain at least one Lowercase letter";
+                                return "Password must contain at least one lowercase letter";
                             }
                             return null;
                         }}
                     >
-                        <Label>Password</Label>
-                        <Input placeholder="Enter your password" />
-                        <Description>Must be at least 8 characters with 1 uppercase and 1 Lowercase</Description>
-                        <FieldError />
+                        <Label className="text-sm font-semibold text-slate-700 pb-1">Password</Label>
+                        <Input placeholder="Enter your password" className="w-full" />
+                        <Description className="text-xs text-slate-400 mt-1">Must contain 6+ characters, 1 uppercase and 1 lowercase</Description>
+                        <FieldError className="text-xs text-red-500 mt-1" />
                     </TextField>
 
-                    {/* select district */}
-                    <div className="w-full sm:w-1/2 flex flex-col gap-2">
-                        <label className="text-xs font-bold text-slate-600 uppercase tracking-wider">
-                            📍 Select District
-                        </label>
-                        <select
-                            name="district"
-                            value={selectDID}
-                            onChange={handleDistrictChange}
-                            className="w-full h-12 px-4 rounded-xl border border-slate-200 bg-white text-slate-800 focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-red-500 transition-all cursor-pointer"
-                        >
-                            <option value="" disabled hidden>Select District</option>
-                            {districts.map((district) => (
-                                <option key={district._id} value={district.id}>
-                                    {district.name}
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 bg-slate-50 p-4 rounded-xl border border-slate-100">
+                        <div className="flex flex-col gap-1.5">
+                            <label className="text-xs font-bold text-slate-500 uppercase tracking-wider">
+                                📍 Recipient District
+                            </label>
+                            <select
+                                name="district"
+                                value={selectDID}
+                                onChange={handleDistrictChange}
+                                className="w-full h-11 px-3 rounded-xl border border-slate-200 bg-white text-slate-800 focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-red-500 transition-all cursor-pointer text-sm font-medium shadow-sm"
+                            >
+                                <option value="" disabled hidden>Select District</option>
+                                {districts.map((district) => (
+                                    <option key={district._id} value={district.id}>
+                                        {district.name}
+                                    </option>
+                                ))}
+                            </select>
+                        </div>
+
+                        <div className="flex flex-col gap-1.5">
+                            <label className="text-xs font-bold text-slate-500 uppercase tracking-wider">
+                                🏡 Recipient Upazila
+                            </label>
+                            <select
+                                name="upazila"
+                                value={selectU}
+                                onChange={(e) => setU(e.target.value)}
+                                disabled={!selectDID} 
+                                className={`w-full h-11 px-3 rounded-xl border bg-white text-slate-800 focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-red-500 transition-all text-sm font-medium shadow-sm ${!selectDID ? "bg-slate-100 cursor-not-allowed border-slate-200 text-slate-400" : "border-slate-200 cursor-pointer"}`}
+                            >
+                                <option value="" disabled hidden>
+                                    {!selectDID ? "Choose a District first" : "Select Upazila"}
                                 </option>
-                            ))}
-                        </select>
+                                {filteredUpazilas.map((upazila) => (
+                                    <option key={upazila._id} value={upazila.name.toLowerCase()}>
+                                        {upazila.name}
+                                    </option>
+                                ))}
+                            </select>
+                        </div>
                     </div>
 
-                    {/* 🏡 Upazila Selector */}
-                    <div className="w-full sm:w-1/2 flex flex-col gap-2">
-                        <label className="text-xs font-bold text-slate-600 uppercase tracking-wider">
-                            🏡 Select Upazila
-                        </label>
-                        <select
-                            name="upazila"
-                            value={selectU}
-                            onChange={(e) => setU(e.target.value)}
-                            disabled={!selectDID} // 💡 Keep disabled until a district is selected
-                            className={`w-full h-12 px-4 rounded-xl border bg-white text-slate-800 focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-red-500 transition-all ${!selectDID ? "bg-slate-50 cursor-not-allowed border-slate-100 text-slate-400" : "border-slate-200 cursor-pointer"
-                                }`}
-                        >
-                            <option value="" disabled hidden>
-                                {!selectDID ? "Choose a District first" : "Select Upazila"}
-                            </option>
-                            {filteredUpazilas.map((upazila) => (
-                                <option key={upazila._id} value={upazila.name.toLowerCase()}>
-                                    {upazila.name}
-                                </option>
-                            ))}
-                        </select>
-                    </div>
-
-
-
-
-
-                    <div className="flex gap-2">
-                        <Button type="submit">
-                            <Check />
-                            Submit
+                    <div className="flex gap-3 mt-4">
+                        <Button type="submit" className="flex-1 font-bold tracking-wide bg-red-600 hover:bg-red-700 text-white shadow-md shadow-red-100 transition-all py-6 rounded-xl flex items-center justify-center gap-2 text-base">
+                            <Check className="w-5 h-5" />
+                            Complete Registration
                         </Button>
-                        <Button type="reset" variant="secondary">
+                        <Button type="reset" className="px-6 font-semibold bg-slate-100 hover:bg-slate-200 text-slate-600 border border-slate-200 transition-all py-6 rounded-xl text-base">
                             Reset
                         </Button>
                     </div>
                 </Form>
-                <ToastContainer />
+                <ToastContainer position="top-right" autoClose={3000} theme="colored" />
             </div>
-
         </div>
     );
 };

@@ -6,7 +6,8 @@ import { userData } from "@/lib/allget";
 import Link from "next/link";
 
 export default function Sidebar( ) {
-    const userinfo = userData()
+    const {userInfo,isLoading} = userData()
+    const userinfo = userInfo
     console.log(userinfo)
     let navItems = []
     const Donormenu = [

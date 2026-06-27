@@ -22,7 +22,7 @@ const Navbar = () => {
             <div className="flex-1">
 
                 <Link href={'/Home'} className="btn btn-ghost text-xl font-black  uppercase text-neutral">
-                    Blood<span className="text-primary">Vault</span>
+                    <span className="text-red-600">BADON</span>
                 </Link>
             </div>
 

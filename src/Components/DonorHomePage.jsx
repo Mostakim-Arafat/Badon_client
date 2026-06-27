@@ -4,7 +4,7 @@ const DonorHomePage = ({userinfo}) => {
   
     return (
         <div>
-            <h1>Welcome {userinfo.name}</h1>
+            <h1>Welcome {userinfo?.name}</h1>
         </div>
     );
 };

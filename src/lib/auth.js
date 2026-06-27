@@ -36,14 +36,14 @@ export const auth = betterAuth({
     emailAndPassword: {
         enabled: true,
     },
-    session : {
-        cookieCache : {
-            enabled : true,
-            strategy : 'jwt',
-            maxAge : 24*60*60
-        }
-    },
-     plugins: [
-        jwt(), 
-    ]
+    // session : {
+    //     cookieCache : {
+    //         enabled : true,
+    //         strategy : 'jwt',
+    //         maxAge : 24*60*60
+    //     }
+    // },
+    //  plugins: [
+    //     jwt(), 
+    // ]
 });
