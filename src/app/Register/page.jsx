@@ -6,6 +6,8 @@ import { ToastContainer, toast } from 'react-toastify';
 import { useEffect } from "react";
 import { getFLocal } from "@/lib/allget";
 import { useState } from "react";
+import { redirect } from "next/navigation";
+import Link from "next/link";
 
 const Register = () => {
     const [districts, setdistricts] = useState([])
@@ -52,6 +54,10 @@ const Register = () => {
         });
         if (data) {
             toast.success('Registered success')
+            setTimeout(() => {
+                redirect('/Home')
+            },2000)
+            
         }
         else {
             toast.error(error.message)
@@ -177,6 +183,9 @@ const Register = () => {
                         </Button>
                     </div>
                 </Form>
+                <div>Have an account? <span>     </span>
+                    <Link href={'/Login'} className="font-bold text-green-500">Login</Link>
+                </div>
                 <ToastContainer position="top-right" autoClose={3000} theme="colored" />
             </div>
         </div>
