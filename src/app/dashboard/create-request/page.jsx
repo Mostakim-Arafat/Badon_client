@@ -4,6 +4,7 @@ import { Button, FieldError, Form, Input, Label, ListBox, Select } from "@heroui
 import { getFLocal, postFLocal } from "@/lib/allget";
 import { useEffect, useState } from "react";
 import { authClient } from "@/lib/auth-client";
+import { ToastContainer, toast } from 'react-toastify';
 
 const CreateRequest = () => {
     const { data: session } = authClient.useSession();
@@ -51,10 +52,10 @@ const CreateRequest = () => {
             console.log(data)
 
             // console.log("Submitted Request Payload:", submissionPayload);
-            alert("Blood Donation Request Created Successfully!");
+            toast.success("Blood Donation Request Created Successfully!");
         }
         else {
-            alert('you are blocked')
+            toast.error('you are blocked')
         }
     }
 
@@ -238,6 +239,7 @@ const CreateRequest = () => {
                         Send Donation Request 🩸
                     </Button>
                 </Form>
+                <ToastContainer/>
             </div>
         </div>
     );
