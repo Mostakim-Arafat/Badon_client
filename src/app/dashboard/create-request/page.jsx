@@ -34,10 +34,18 @@ const CreateRequest = () => {
         );
 
         //district end
+        useEffect(() => {
+            const largeData = async () => {
+                setdistricts(await getFLocal('/district'))
+                setupazilas(await getFLocal('/upazila'))
+            }
+            largeData()
+        }, [])
 
     const onSubmit = async (e) => {
+         e.preventDefault();
         if (userInfo?.status === 'active') {
-            e.preventDefault();
+           
             const formData = new FormData(e.currentTarget);
             const formEntries = Object.fromEntries(formData.entries());
 
@@ -59,13 +67,7 @@ const CreateRequest = () => {
         }
     }
 
-     useEffect(() => {
-            const largeData = async () => {
-                setdistricts(await getFLocal('/district'))
-                setupazilas(await getFLocal('/upazila'))
-            }
-            largeData()
-        }, [])
+     
 
 
     return (
