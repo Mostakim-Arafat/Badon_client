@@ -3,7 +3,7 @@ import { Button } from '@heroui/react';
 import Fundtable from '@/Components/Fundtable';
 import { getFLocalServer, getUserData } from '@/lib/crud';
 
-
+export const dynamic = 'force-dynamic';
 const Funding_link = async({searchParams}) => {
     const data = await getFLocalServer('/fund')
     console.log(data)
