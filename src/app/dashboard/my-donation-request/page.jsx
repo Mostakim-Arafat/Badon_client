@@ -3,6 +3,8 @@ import { getFLocal } from '@/lib/allget';
 import { getUserData } from '@/lib/crud';
 import MyDonationRequestTable from '@/Components/myDonationRequestTable';
 
+export const dynamic = 'force-dynamic';
+
 const MyDonationRequest = async() => {
     const userinfo = await getUserData()
     // console.log(userinfo)

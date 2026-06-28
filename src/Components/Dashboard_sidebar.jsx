@@ -2,7 +2,7 @@
 
 import { Bars, Bell, House, Person } from "@gravity-ui/icons";
 import { Button, Drawer } from "@heroui/react";
-import { userData } from "@/lib/allget";
+
 import Link from "next/link";
 import { authClient } from "@/lib/auth-client";
 
