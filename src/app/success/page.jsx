@@ -1,7 +1,7 @@
 import { redirect } from 'next/navigation';
 import { stripe } from '@/lib/stripe';
 import { getUserData, postToServer } from '@/lib/crud';
-
+export const dynamic = 'force-dynamic';
 export default async function Success({ searchParams }) {
   const userInfo = await getUserData();
   const { session_id } = await searchParams;
