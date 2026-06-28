@@ -6,32 +6,42 @@ import Image from 'next/image';
 import { patchFLocal } from '@/lib/allget';
 import { Ellipsis } from "@gravity-ui/icons";
 import { Button, Popover } from "@heroui/react";
-
+import { ToastContainer, toast } from 'react-toastify';
 
 const AlluserTable = ({ users }) => {
   
-   
+   const reloads = ()  => setTimeout(() => {
+            window.location.reload()
+        }, 3000)
     // console.log(users)
     const handleBlock = async (id) => {
      
         console.log(id)
         const statusBlock = await patchFLocal(`/users?status=Blocked&id=${id}`)
         console.log(statusBlock)
+        toast.success('make blocked')
+        reloads()
     }
     const handleActive = async (id) => {
        
         const statusBlock = await patchFLocal(`/users?status=active&id=${id}`)
         console.log(statusBlock)
+        toast.success('make active')
+        reloads()
     }
     const handleV = async (id) => {
        
         const statusBlock = await patchFLocal(`/users?role=volunteer&id=${id}`)
         console.log(statusBlock)
+        toast.success('make volunteer')
+        reloads()
     }
     const handleAdmin = async (id) => {
         
         const statusBlock = await patchFLocal(`/users?role=admin&id=${id}`)
         console.log(statusBlock)
+        toast.success('make Admin')
+        reloads()
     }
 
     const getStatusStyle = (status) => {
@@ -149,6 +159,7 @@ const AlluserTable = ({ users }) => {
                     </Table.ScrollContainer>
                 </Table>
             </div>
+            <ToastContainer/>
         </div>
     );
 };
