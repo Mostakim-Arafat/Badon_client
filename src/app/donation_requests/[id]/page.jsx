@@ -1,10 +1,11 @@
+
 import React from 'react';
 import DonationRequestDetails from '@/Components/RequestDetailCard';
-import { getFLocal } from '@/lib/allget';
+import { getFLocalServer } from '@/lib/crud';
 
 const RequestDetails = async({params}) => {
     const {id} = await params
-    const data = await getFLocal(`/donation_requests/${id}`)
+    const data = await getFLocalServer(`/donation_requests/${id}`)
     
     return (
         <div className="min-h-screen w-full bg-rose-50/30 text-slate-800 p-4 flex items-center justify-center">

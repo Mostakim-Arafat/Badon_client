@@ -1,12 +1,11 @@
 import React from 'react';
 import { Button } from '@heroui/react';
 import Fundtable from '@/Components/Fundtable';
-import { getUserData } from '@/lib/crud';
-import { getFLocal } from '@/lib/allget';
+import { getFLocalServer, getUserData } from '@/lib/crud';
 
 
 const Funding_link = async({searchParams}) => {
-    const data = await getFLocal('/fund')
+    const data = await getFLocalServer('/fund')
     console.log(data)
     const { canceled } = await searchParams
     const userInfo = await getUserData()

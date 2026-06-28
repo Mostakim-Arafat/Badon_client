@@ -8,10 +8,6 @@ import { userData } from "@/lib/allget";
 export default function DonationRequestDetails({ request }) {
     const {userInfo,isLoading} = userData();
     
-   
-  
-
-
     console.log(userInfo)
     console.log(request)
     const {

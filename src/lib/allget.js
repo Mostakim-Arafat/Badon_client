@@ -14,19 +14,39 @@ export const userData = () =>{
 }
 
 const getAuthHeaders = async () => {
+    const baseHeaders = { "Content-Type": "application/json" };
+
     try {
+        const { data: session, error: sessionError } = await authClient.getSession();
+
+        if (sessionError) {
+            console.error("Session error:", sessionError);
+            return baseHeaders;
+        }
+
+        if (!session?.user) {
+            console.warn("No active session. Log in before calling protected APIs.");
+            return baseHeaders;
+        }
+
         const { data, error } = await authClient.token();
-        console.log(data)
+
+        if (error) {
+            console.error("Auth token error:", error);
+            return baseHeaders;
+        }
+
         if (data?.token) {
             return {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${data.token}`
+                ...baseHeaders,
+                authorization: `Bearer ${data.token}`,
             };
         }
     } catch (err) {
         console.error("Failed to fetch auth token:", err);
     }
-    return { 'Content-Type': 'application/json' };
+
+    return baseHeaders;
 };
 
 export const postFLocal = async(url,bodys) => {
@@ -41,8 +61,9 @@ export const postFLocal = async(url,bodys) => {
    
 }
 
-export const getFLocal = async(url) => {
+export const getFLocal = async(url,token='') => {
     const headers = await getAuthHeaders()
+
     const getman = await fetch(`${process.env.NEXT_PUBLIC_SERVER}${url}`,{
         method : 'GET' ,
         headers : headers
