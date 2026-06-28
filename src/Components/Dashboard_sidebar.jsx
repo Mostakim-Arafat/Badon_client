@@ -4,10 +4,11 @@ import { Bars, Bell, House, Person } from "@gravity-ui/icons";
 import { Button, Drawer } from "@heroui/react";
 import { userData } from "@/lib/allget";
 import Link from "next/link";
+import { authClient } from "@/lib/auth-client";
 
 export default function Sidebar() {
-  const { userInfo, isLoading } = userData()
-  const userinfo = userInfo
+  const {data:session,ispending} = authClient.useSession()
+  const userinfo = session?.user
   let navItems = []
   const Donormenu = [
     { icon: Person, label: "Profile", href: '/dashboard/Profile' },

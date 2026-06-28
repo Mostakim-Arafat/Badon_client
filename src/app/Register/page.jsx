@@ -8,44 +8,62 @@ import { getFLocal } from "@/lib/allget";
 import { useState } from "react";
 import { redirect } from "next/navigation";
 import Link from "next/link";
+import Image from "next/image";
+
 
 const Register = () => {
+    const [logoUrl, setlogoUrl] = useState('')
     const [districts, setdistricts] = useState([])
     const [upazilas, setupazilas] = useState([])
     const [selectDID, setDID] = useState('')
     const [selectU, setU] = useState('')
-    
-    useEffect(() => {
-        const largeData = async () => {
-            setdistricts(await getFLocal('/district'))
-            setupazilas(await getFLocal('/upazila'))
-        }
-        largeData()
-    }, [])
+
 
     const handleDistrictChange = (e) => {
         setDID(e.target.value);
-        setU(""); 
+        setU("");
     };
 
     const filteredUpazilas = upazilas.filter(
         (upazila) => upazila.district_id === selectDID
     );
 
+
+
+    const handleLogoUrl = async (e) => {
+        const file = e.currentTarget.files[0]
+        console.log(file)
+        if(!file) return
+        if(file.size> 5*1024*1024){
+            toast('file size too long')
+            return
+        }
+        const formData = new FormData();
+        formData.append('image', file);
+        console.log(formData)
+        const IMAGE = process.env.NEXT_PUBLIC_IMAGE_UPLOAD_API
+        const upload = await fetch(`https://api.imgbb.com/1/upload?key=${IMAGE}`, {
+            method: 'POST',
+            body: formData
+        })
+        const feedback = await upload.json()
+        console.log(feedback)
+     }
+
     const onSubmit = async (e) => {
         e.preventDefault()
         const data1 = new FormData(e.currentTarget)
         const data2 = Object.fromEntries(data1.entries())
 
-        const districtObj = districts.find( i => 
+        const districtObj = districts.find(i =>
             String(i.id) === String(selectDID)
         )
         const districtName = districtObj?.name
 
         const { data, error } = await authClient.signUp.email({
-            name: data2.fullName, 
-            email: data2.email, 
-            password: data2.password, 
+            name: data2.fullName,
+            email: data2.email,
+            password: data2.password,
             image: data2.photoURL,
             role: 'donor',
             status: 'active',
@@ -56,13 +74,22 @@ const Register = () => {
             toast.success('Registered success')
             setTimeout(() => {
                 redirect('/Home')
-            },2000)
-            
+            }, 2000)
+
         }
         else {
             toast.error(error.message)
         }
     }
+
+    
+    useEffect(() => {
+        const largeData = async () => {
+            setdistricts(await getFLocal('/district'))
+            setupazilas(await getFLocal('/upazila'))
+        }
+        largeData()
+    }, [])
 
     return (
         <div className="flex justify-center items-center min-h-screen bg-rose-50/50 p-6 text-slate-800">
@@ -74,6 +101,13 @@ const Register = () => {
                     <h1 className="text-3xl text-center font-bold text-red-700 tracking-wide mt-2">Join as a Donor</h1>
                     <p className="text-sm text-rose-500 font-medium">Become a lifesaver today. Register your account.</p>
                 </div>
+
+                <Image
+                src={logoUrl || 'https://cdn.pixabay.com/photo/2012/03/01/01/45/baby-20374_1280.jpg'}
+                alt="upload img"
+                width={50}
+                height={50}
+                />
 
                 <Form className="flex w-full flex-col gap-5" onSubmit={onSubmit}>
                     <TextField isRequired className="w-full" name="fullName">
@@ -99,11 +133,11 @@ const Register = () => {
                         <FieldError className="text-xs text-red-500 mt-1" />
                     </TextField>
 
-                    <TextField className="w-full" name="photoURL" defaultValue='https://a57.foxnews.com/static.foxnews.com/foxnews.com/content/uploads/2024/11/1200/675/e5c757ab-trump.jpg?ve=1&tl=1'>
+                    {/* <TextField className="w-full" name="photoURL"> */}
                         <Label className="text-sm font-semibold text-slate-700 pb-1">Profile Photo URL</Label>
-                        <Input placeholder="https://...." type="url" className="w-full" />
+                        <Input  type="file" accept="image/png, image/jpeg, image/jpg" className="w-full" onChange={handleLogoUrl} />
                         <Description className="text-xs text-slate-400 mt-1">Provide a valid image direct link</Description>
-                    </TextField>
+                    {/* </TextField> */}
 
                     <TextField
                         isRequired
@@ -158,7 +192,7 @@ const Register = () => {
                                 name="upazila"
                                 value={selectU}
                                 onChange={(e) => setU(e.target.value)}
-                                disabled={!selectDID} 
+                                disabled={!selectDID}
                                 className={`w-full h-11 px-3 rounded-xl border bg-white text-slate-800 focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-red-500 transition-all text-sm font-medium shadow-sm ${!selectDID ? "bg-slate-100 cursor-not-allowed border-slate-200 text-slate-400" : "border-slate-200 cursor-pointer"}`}
                             >
                                 <option value="" disabled hidden>
