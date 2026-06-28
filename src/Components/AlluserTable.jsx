@@ -7,7 +7,9 @@ import { patchFLocal } from '@/lib/allget';
 import { Ellipsis } from "@gravity-ui/icons";
 import { Button, Popover } from "@heroui/react";
 
+
 const AlluserTable = ({ users }) => {
+  
    
     // console.log(users)
     const handleBlock = async (id) => {
