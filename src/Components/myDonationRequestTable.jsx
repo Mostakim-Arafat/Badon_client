@@ -7,6 +7,7 @@ import { patchFLocal } from "@/lib/allget";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Dropdown, Header, Label } from "@heroui/react";
+import { ToastContainer, toast } from 'react-toastify';
 
 const MyDonationRequestTable = ({ datas, role }) => {
     const [selected, setSelected] = useState(new Set(["all"]));
@@ -29,6 +30,12 @@ const MyDonationRequestTable = ({ datas, role }) => {
     const handleDelete = async (id) => {
         const deleted = await patchFLocal(`/donation_requests/${id}?donationstatus=canceled`)
         console.log(deleted)
+        if(deleted.modifiedCount>0){
+            toast.success('Request canceled')
+            setTimeout(() => {
+                window.location.reload()
+            }, 2000);
+        }
     }
 
     const getBadgeStyle = (status) => {
@@ -173,6 +180,7 @@ const MyDonationRequestTable = ({ datas, role }) => {
                     </Table.ScrollContainer>
                 </Table>
             </div>
+            <ToastContainer/>
         </div>
     );
 };
