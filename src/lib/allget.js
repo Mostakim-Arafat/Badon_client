@@ -16,6 +16,7 @@ export const userData = () =>{
 const getAuthHeaders = async () => {
     try {
         const { data, error } = await authClient.token();
+        console.log(data)
         if (data?.token) {
             return {
                 'Content-Type': 'application/json',
