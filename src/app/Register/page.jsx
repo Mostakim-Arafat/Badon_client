@@ -48,6 +48,10 @@ const Register = () => {
         })
         const feedback = await upload.json()
         console.log(feedback)
+         if (feedback.success) {
+
+                setlogoUrl(feedback.data.url);
+            }
      }
 
     const onSubmit = async (e) => {
