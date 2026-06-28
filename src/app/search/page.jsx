@@ -42,12 +42,24 @@ const Search = () => {
         const formData = new FormData(e.currentTarget);
         const filters = Object.fromEntries(formData.entries());
         const searchParamsObj = {};
+
+        if (selectDID) {
+        const matchingDistrict = districts.find(
+            (d) => String(d.id) === String(selectDID)
+        );
+        if (matchingDistrict && filters.district) {
+            searchParamsObj.district = matchingDistrict.name;
+        }
+    }
+
+
+
         if (filters.bloodGroup) searchParamsObj.blood = filters.bloodGroup;
-        if (filters.district) searchParamsObj.district = filters.district;
+        // if (filters.district) searchParamsObj.district = filters.district;
         if (filters.upazila) searchParamsObj.upazila = filters.upazila;
 
         const params = new URLSearchParams(searchParamsObj);
-
+        // console.log(filters.district)
 
         const filteredCard = await getFLocal(`/donation_requests?${params.toString()}`);
         setoutput(filteredCard)
@@ -92,7 +104,7 @@ const Search = () => {
                     >
                         <option value="" disabled hidden>Select District</option>
                         {districts.map((district) => (
-                            <option key={district._id} value={district.id}>
+                            <option key={district._id} value={district.id} name={district.name}>
                                 {district.name}
                             </option>
                         ))}
