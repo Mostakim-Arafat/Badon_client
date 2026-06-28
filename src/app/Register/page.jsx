@@ -10,14 +10,12 @@ import { redirect } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 
-
 const Register = () => {
     const [logoUrl, setlogoUrl] = useState('')
     const [districts, setdistricts] = useState([])
     const [upazilas, setupazilas] = useState([])
     const [selectDID, setDID] = useState('')
     const [selectU, setU] = useState('')
-
 
     const handleDistrictChange = (e) => {
         setDID(e.target.value);
@@ -27,8 +25,6 @@ const Register = () => {
     const filteredUpazilas = upazilas.filter(
         (upazila) => upazila.district_id === selectDID
     );
-
-
 
     const handleLogoUrl = async (e) => {
         const file = e.currentTarget.files[0]
@@ -48,11 +44,10 @@ const Register = () => {
         })
         const feedback = await upload.json()
         console.log(feedback)
-         if (feedback.success) {
-
-                setlogoUrl(feedback.data.url);
-            }
-     }
+        if (feedback.success) {
+            setlogoUrl(feedback.data.url);
+        }
+    }
 
     const onSubmit = async (e) => {
         e.preventDefault()
@@ -68,7 +63,7 @@ const Register = () => {
             name: data2.fullName,
             email: data2.email,
             password: data2.password,
-            image: data2.photoURL,
+            image: logoUrl,
             role: 'donor',
             status: 'active',
             district: districtName,
@@ -79,14 +74,12 @@ const Register = () => {
             setTimeout(() => {
                 redirect('/Home')
             }, 2000)
-
         }
         else {
             toast.error(error.message)
         }
     }
 
-    
     useEffect(() => {
         const largeData = async () => {
             setdistricts(await getFLocal('/district'))
@@ -99,19 +92,24 @@ const Register = () => {
         <div className="flex justify-center items-center min-h-screen bg-rose-50/50 p-6 text-slate-800">
             <div className="w-full max-w-xl border border-red-100 p-8 rounded-2xl shadow-xl bg-white flex flex-col gap-6">
                 <div className="flex flex-col items-center gap-2 border-b pb-5">
-                    <div className="w-14 h-14 rounded-full bg-red-100 flex items-center justify-center text-red-600 font-bold text-3xl shadow-sm">
-                        🩸
-                    </div>
+                    {logoUrl ? (
+                        <div className="w-16 h-16 rounded-full overflow-hidden shadow-sm border border-red-100">
+                            <Image
+                                src={logoUrl}
+                                alt="Profile Preview"
+                                width={64}
+                                height={64}
+                                className="w-full h-full object-cover"
+                            />
+                        </div>
+                    ) : (
+                        <div className="w-14 h-14 rounded-full bg-red-100 flex items-center justify-center text-red-600 font-bold text-3xl shadow-sm">
+                            🩸
+                        </div>
+                    )}
                     <h1 className="text-3xl text-center font-bold text-red-700 tracking-wide mt-2">Join as a Donor</h1>
                     <p className="text-sm text-rose-500 font-medium">Become a lifesaver today. Register your account.</p>
                 </div>
-
-                <Image
-                src={logoUrl || 'https://cdn.pixabay.com/photo/2012/03/01/01/45/baby-20374_1280.jpg'}
-                alt="upload img"
-                width={50}
-                height={50}
-                />
 
                 <Form className="flex w-full flex-col gap-5" onSubmit={onSubmit}>
                     <TextField isRequired className="w-full" name="fullName">
@@ -137,11 +135,11 @@ const Register = () => {
                         <FieldError className="text-xs text-red-500 mt-1" />
                     </TextField>
 
-                    {/* <TextField className="w-full" name="photoURL"> */}
-                        <Label className="text-sm font-semibold text-slate-700 pb-1">Profile Photo URL</Label>
-                        <Input  type="file" accept="image/png, image/jpeg, image/jpg" className="w-full" onChange={handleLogoUrl} />
-                        <Description className="text-xs text-slate-400 mt-1">Provide a valid image direct link</Description>
-                    {/* </TextField> */}
+                    <div>
+                        <Label className="text-sm font-semibold text-slate-700 pb-1 block">Profile Photo</Label>
+                        <Input type="file" accept="image/png, image/jpeg, image/jpg" className="w-full mt-1" onChange={handleLogoUrl} />
+                        <Description className="text-xs text-slate-400 mt-1">Provide a valid profile image file</Description>
+                    </div>
 
                     <TextField
                         isRequired
@@ -221,7 +219,7 @@ const Register = () => {
                         </Button>
                     </div>
                 </Form>
-                <div>Have an account? <span>     </span>
+                <div>Have an account? <span>    </span>
                     <Link href={'/Login'} className="font-bold text-green-500">Login</Link>
                 </div>
                 <ToastContainer position="top-right" autoClose={3000} theme="colored" />
